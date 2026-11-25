@@ -6,7 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!**/public", "!**/pnpm-lock.yaml", "!**/*.md"]
+    "includes": ["**", "!**/public", "!**/pnpm-lock.yaml", "!**/*.md", "!**/photos.manifest.json"]
   },
   "formatter": {
     "enabled": true,
