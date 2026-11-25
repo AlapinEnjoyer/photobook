@@ -1,9 +1,17 @@
 // @ts-check
-
 import preact from "@astrojs/preact";
-import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap";
+import { defineConfig, envField } from "astro/config";
+import config from "./photobook.config";
+import photos from "./src/integrations/photos.ts";
 
-// https://astro.build/config
 export default defineConfig({
-  integrations: [preact()],
+  site: config.site,
+  integrations: [photos(config), preact(), sitemap()],
+
+  env: {
+    schema: {
+      PHOTO_CDN_BASE: envField.string({ context: "server", access: "public", optional: true }),
+    },
+  },
 });
