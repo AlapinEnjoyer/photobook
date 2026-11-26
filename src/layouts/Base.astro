@@ -1,0 +1,76 @@
+---
+import "@fontsource-variable/archivo";
+import "@fontsource/space-mono/400.css";
+import "../styles/tokens.css";
+import "../styles/keyframes.css";
+import "../styles/shell.css";
+import "../styles/grid.css";
+import "../styles/bar.css";
+import "../styles/menu.css";
+import "../styles/collections.css";
+import "../styles/about.css";
+import "../styles/lightbox.css";
+import config from "../../photobook.config";
+import { publicPath } from "../core/routes";
+import { THEME_KEY } from "../core/theme";
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  canonicalPath?: string;
+}
+
+const { title, description = config.description, ogImage, noindex = false, canonicalPath } = Astro.props;
+const defaultTheme = config.theme.default;
+const site = Astro.site ?? new URL(config.site);
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, site);
+const socialImage = new URL(ogImage ?? publicPath(config.ogImage), site);
+const socialImageType = socialImage.pathname.toLowerCase().endsWith(".png") ? "image/png" : "image/jpeg";
+const sitemap = new URL(publicPath("sitemap-index.xml"), site);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href={publicPath("favicon.svg")} type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href={sitemap} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="color-scheme" content="light dark" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:type" content={socialImageType} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+
+    {/* Blocking inline script prevents theme flash before first paint. */}
+    <script is:inline define:vars={{ defaultTheme, themeKey: THEME_KEY }}>
+      (() => {
+        const pick = () => {
+          try {
+            const saved = localStorage.getItem(themeKey);
+            if (saved === "light" || saved === "dark") return saved;
+          } catch {}
+          if (defaultTheme === "light" || defaultTheme === "dark") return defaultTheme;
+          return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        };
+        document.documentElement.dataset.theme = pick();
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

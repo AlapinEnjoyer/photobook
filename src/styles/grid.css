@@ -1,0 +1,110 @@
+/* Justified rows: flex-grow and flex-basis scale with aspect ratio without cropping. */
+.pb-grid {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: clamp(18px, 2.2vw, 34px);
+  padding: 76px clamp(24px, 3vw, 48px) 60px;
+  box-sizing: border-box;
+}
+
+/* Prevents the final row from stretching across the full width. */
+.pb-grid::after {
+  content: "";
+  flex-grow: 1000000000;
+}
+
+.pb-grid-more {
+  flex-basis: 1px;
+  flex-grow: 1000000000;
+  height: 1px;
+  pointer-events: none;
+}
+
+.pb-cell {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  color: inherit;
+  cursor: pointer;
+  flex-grow: calc(var(--w) * (100000 / var(--h)));
+  flex-basis: calc(var(--row-h) * (var(--w) / var(--h)));
+  aspect-ratio: var(--w) / var(--h);
+  animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) var(--delay, 0s) both;
+}
+
+.pb-cell-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pb-cell:hover .pb-cell-img,
+.pb-cell:focus-visible .pb-cell-img {
+  transform: scale(1.035);
+}
+
+.pb-cell:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+
+.pb-cell-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.pb-cell-play {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 0.55);
+  background: rgb(10 10 10 / 0.28);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.pb-cell-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px 12px 10px;
+  background: linear-gradient(to top, rgb(0 0 0 / 0.45), transparent);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .pb-grid::after {
+    display: none;
+  }
+
+  .pb-grid-more {
+    flex-basis: 100%;
+  }
+}

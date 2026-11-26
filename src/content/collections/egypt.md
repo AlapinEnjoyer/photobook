@@ -35,7 +35,7 @@ photos:
     alt: "A girl sits beside a stone hand mill inside a small shelter."
     caption: "A young grain grinder at work."
   - file: "girls-making-bread.jpg"
-    alt: "Two women prepare flatbread by hand in a dim room."
+    alt: "Two girls prepare flatbread by hand in a hut."
     caption: "Making bread by hand."
     featured: true
   - file: "stone-house-mural.jpg"

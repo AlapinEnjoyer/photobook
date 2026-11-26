@@ -1,0 +1,109 @@
+.pb-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: var(--menu-scrim);
+  backdrop-filter: blur(34px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 clamp(24px, 8vw, 120px);
+  gap: 6px;
+  pointer-events: auto;
+  animation: menuFade 0.3s ease both;
+}
+
+.pb-menu[data-out] {
+  pointer-events: none;
+  animation: menuFadeOut 0.38s ease 0.9s both;
+}
+
+.pb-menu-item,
+.pb-menu-foot {
+  animation: menuItemIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) calc(0.05s + var(--i) * 0.17s) backwards;
+}
+
+.pb-menu-item {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  cursor: pointer;
+  font-size: clamp(30px, 5.2vw, 62px);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.pb-menu-item:hover,
+.pb-menu-item:focus-visible {
+  opacity: 1;
+  font-weight: 500;
+}
+
+.pb-menu-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pb-menu-item[aria-current="true"] .pb-menu-count {
+  opacity: 0.5;
+}
+
+.pb-menu-foot {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 4vw, 44px);
+  margin-top: clamp(28px, 5vh, 54px);
+  flex-wrap: wrap;
+}
+
+.pb-menu[data-out] .pb-menu-item {
+  animation: menuItemOut 0.5s cubic-bezier(0.5, 0, 0.75, 0) calc((var(--n) - 1 - var(--i)) * 0.17s) forwards;
+}
+
+.pb-menu[data-out] .pb-menu-foot {
+  animation: menuItemOut 0.5s cubic-bezier(0.5, 0, 0.75, 0) 0s forwards;
+}
+
+.pb-foot-link,
+.pb-theme-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.45;
+  transition: opacity 0.25s ease;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.pb-theme-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.pb-foot-link:hover,
+.pb-foot-link:focus-visible,
+.pb-theme-btn:hover,
+.pb-theme-btn:focus-visible {
+  opacity: 1;
+}
+
+.pb-theme-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: linear-gradient(90deg, var(--ink) 0 50%, transparent 50% 100%);
+}

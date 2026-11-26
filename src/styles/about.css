@@ -1,0 +1,65 @@
+/* Transparent so the theme wash circle stays visible. */
+.pb-about {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  padding: clamp(90px, 14vh, 160px) clamp(24px, 6vw, 80px) clamp(48px, 8vh, 96px);
+  box-sizing: border-box;
+  user-select: text;
+}
+
+.pb-about-inner {
+  width: 100%;
+  max-width: 62ch;
+  animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.pb-about-inner :where(h1, h2, h3) {
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+  margin: 0 0 clamp(20px, 3vh, 34px);
+}
+
+.pb-about-inner :where(h1) {
+  font-size: clamp(34px, 5vw, 68px);
+}
+
+.pb-about-inner :where(h2, h3) {
+  font-size: clamp(19px, 2vw, 24px);
+  margin-top: clamp(34px, 5vh, 54px);
+  opacity: 0.75;
+}
+
+.pb-about-inner :where(p, li) {
+  font-size: clamp(15px, 1.25vw, 17px);
+  line-height: 1.65;
+  opacity: 0.72;
+  margin: 0 0 1.1em;
+}
+
+.pb-about-inner :where(a) {
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in oklch, var(--ink) 35%, transparent);
+}
+
+.pb-about-inner :where(hr) {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: clamp(34px, 5vh, 54px) 0;
+}
+
+.pb-about-inner :where(code, kbd) {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  letter-spacing: 0.06em;
+}
+
+.pb-about-inner :where(ul) {
+  padding-left: 1.1em;
+  margin: 0 0 1.1em;
+}

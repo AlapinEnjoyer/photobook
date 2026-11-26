@@ -1,0 +1,112 @@
+/* Registered with @property so color tokens interpolate; --paper uses the wash circle. */
+
+@property --ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.2 0.006 95);
+}
+@property --line {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.845 0.005 95);
+}
+@property --soft {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.888 0.006 95);
+}
+@property --scrim {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.972 0.004 95 / 0.72);
+}
+@property --menu-scrim {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.972 0.004 95 / 0.42);
+}
+
+:root {
+  color-scheme: light;
+  --paper: oklch(0.972 0.004 95);
+  --ink: oklch(0.2 0.006 95);
+  --line: oklch(0.845 0.005 95);
+  --soft: oklch(0.888 0.006 95);
+  --scrim: oklch(0.972 0.004 95 / 0.72);
+  --menu-scrim: oklch(0.972 0.004 95 / 0.42);
+
+  --font-sans: "Archivo Variable", Archivo, Helvetica, Arial, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: oklch(0.155 0.004 95);
+  --ink: oklch(0.905 0.004 95);
+  --line: oklch(0.315 0.005 95);
+  --soft: oklch(0.265 0.006 95);
+  --scrim: oklch(0.135 0.004 95 / 0.74);
+  --menu-scrim: oklch(0.135 0.004 95 / 0.46);
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+:root[data-fade="1"] {
+  transition:
+    --ink 1.2s cubic-bezier(0.45, 0, 0.15, 1),
+    --line 1.2s cubic-bezier(0.45, 0, 0.15, 1),
+    --soft 1.2s cubic-bezier(0.45, 0, 0.15, 1),
+    --scrim 1.2s cubic-bezier(0.45, 0, 0.15, 1),
+    --menu-scrim 1.2s cubic-bezier(0.45, 0, 0.15, 1);
+}
+
+:root[data-fade="1"] body,
+:root[data-fade="1"] .pb-root,
+:root[data-fade="1"] .pb-cols,
+:root[data-fade="1"] .pb-col-panel {
+  background: var(--paper-from);
+}
+
+a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.pb-about-inner a:hover {
+  opacity: 0.5;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: override component animations for reduced motion */
+    animation-duration: 0.01ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: override component animations for reduced motion */
+    animation-iteration-count: 1 !important;
+    /* biome-ignore lint/complexity/noImportantStyles: override component transitions for reduced motion */
+    transition-duration: 0.01ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: override smooth scrolling for reduced motion */
+    scroll-behavior: auto !important;
+  }
+}

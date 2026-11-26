@@ -1,0 +1,108 @@
+@keyframes menuFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes menuFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes menuItemIn {
+  from {
+    translate: -48px 0;
+    scale: 0.95;
+    filter: opacity(0);
+  }
+  to {
+    translate: 0 0;
+    scale: 1;
+    filter: opacity(1);
+  }
+}
+@keyframes menuItemOut {
+  from {
+    translate: 0 0;
+    scale: 1;
+    filter: opacity(1);
+  }
+  to {
+    translate: -48px 0;
+    scale: 0.95;
+    filter: opacity(0);
+  }
+}
+@keyframes lbFromRight {
+  from {
+    opacity: 0;
+    translate: 56px 0;
+    scale: 0.985;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+@keyframes lbFromLeft {
+  from {
+    opacity: 0;
+    translate: -56px 0;
+    scale: 0.985;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    translate: 0 22px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes maskInL {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes maskInR {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes typeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes washIn {
+  from {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
