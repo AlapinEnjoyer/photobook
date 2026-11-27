@@ -1,7 +1,7 @@
 ---
 title: "Egypt"
 year: "2026"
-order: 1
+order: 2
 cover: "balloon-in-open-sky.jpg"
 photos:
   - file: "balloon-and-canyon.jpg"

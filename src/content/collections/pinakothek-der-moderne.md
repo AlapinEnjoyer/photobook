@@ -1,7 +1,7 @@
 ---
 title: "Pinakothek der Moderne"
 year: "2026"
-order: 2
+order: 1
 cover: "glass-dome.jpg"
 photos:
   - file: "camera-through-glass.jpg"
