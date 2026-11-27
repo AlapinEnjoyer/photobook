@@ -1,0 +1,13 @@
+---
+import { getEntry } from "astro:content";
+import config from "../../photobook.config";
+import Photobook from "../components/Photobook.astro";
+
+const hasAbout = Boolean(await getEntry("about", "about"));
+---
+
+<Photobook
+  title={hasAbout ? `About | ${config.title}` : config.title}
+  view={{ kind: hasAbout ? "about" : "root" }}
+  fallback={!hasAbout}
+/>

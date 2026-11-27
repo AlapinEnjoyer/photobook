@@ -1,0 +1,32 @@
+---
+import type { GetStaticPaths } from "astro";
+import config from "../../../photobook.config";
+import Photobook from "../../components/Photobook.astro";
+import type { Collection } from "../../core/types";
+import { getCollections, getSocialImages } from "../../data/photos";
+
+export const getStaticPaths = (async () => {
+  const collections = await getCollections();
+  return collections.map((collection) => ({
+    params: { collection: collection.key },
+    props: { collection },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  collection: Collection;
+}
+
+const { collection } = Astro.props;
+const title = `${collection.name} | ${config.title}`;
+const description = `${collection.name}: ${collection.countLabel}.`;
+const ogImage = (await getSocialImages()).collections.get(collection.key);
+---
+
+<Photobook
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  view={{ kind: "collection", key: collection.key }}
+  scope={collection.key}
+/>

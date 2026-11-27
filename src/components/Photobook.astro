@@ -1,0 +1,71 @@
+---
+import { getEntry, render } from "astro:content";
+import config from "../../photobook.config";
+import App from "../client/components/App";
+import { embedPool, poolFor, poolKey } from "../core/pool";
+import type { View } from "../core/routes";
+import { categoryView, viewPath } from "../core/routes";
+import { getCategories, getCollections, getPhotos } from "../data/photos";
+import Base from "../layouts/Base.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  view?: View;
+  scope?: string;
+  fallback?: boolean;
+}
+
+const {
+  title = config.title,
+  description = config.description,
+  ogImage,
+  view = { kind: "root" },
+  scope = "all",
+  fallback = false,
+} = Astro.props;
+
+const [photos, collections, categories] = await Promise.all([getPhotos(), getCollections(), getCategories()]);
+
+const key = poolKey({ view, scope });
+const pool = key == null ? [] : poolFor(photos, key);
+const embedded = embedPool(pool, view.kind === "photo" ? view.id : undefined);
+
+const aboutEntry = await getEntry("about", "about");
+const About = aboutEntry ? (await render(aboutEntry)).Content : null;
+---
+
+<Base
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  noindex={fallback}
+  canonicalPath={fallback ? viewPath({ kind: "root" }) : undefined}
+>
+  <App
+    client:load
+    siteTitle={config.title}
+    view={view}
+    scope={scope}
+    photos={embedded}
+    poolComplete={embedded.length === pool.length}
+    complete={embedded.length === photos.length}
+    collections={collections}
+    categories={categories}
+    rowHeight={config.grid.rowHeight}
+    showCaptions={config.grid.showCaptions}
+    sizes={config.images.sizes}
+    personalSite={config.personalSite}
+  >
+    {About && <About />}
+  </App>
+
+  <noscript>
+    <nav class="pb-noscript" aria-label="Categories">
+      {categories.map((c) => (
+        <a class="pb-foot-link" href={viewPath(categoryView(c.key))}>{c.label}</a>
+      ))}
+    </nav>
+  </noscript>
+</Base>

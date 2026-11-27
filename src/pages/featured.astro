@@ -1,0 +1,13 @@
+---
+import config from "../../photobook.config";
+import Photobook from "../components/Photobook.astro";
+import { getCategories } from "../data/photos";
+
+const hasFeatured = (await getCategories()).some((category) => category.key === "featured");
+---
+
+<Photobook
+  title={hasFeatured ? `Featured | ${config.title}` : config.title}
+  view={{ kind: hasFeatured ? "featured" : "root" }}
+  fallback={!hasFeatured}
+/>

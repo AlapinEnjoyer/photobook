@@ -1,0 +1,144 @@
+---
+import config from "../../photobook.config";
+import { viewPath } from "../core/routes";
+import Base from "../layouts/Base.astro";
+
+const home = viewPath({ kind: "root" });
+---
+
+<Base
+  title={`Page not found | ${config.title}`}
+  description={`Nothing lives at this address on ${config.title}.`}
+  noindex
+>
+  <main class="nf">
+    <div class="nf-blob nf-a" aria-hidden="true"></div>
+    <div class="nf-blob nf-b" aria-hidden="true"></div>
+    <div class="nf-blob nf-c" aria-hidden="true"></div>
+
+    <section class="nf-card">
+      <p class="nf-code">404</p>
+      <h1 class="nf-title">This frame is empty.</h1>
+      <p class="nf-copy">
+        Nothing lives at this address. A photo's URL follows its file, so a link
+        that stopped working usually means the picture was renamed or refiled.
+      </p>
+      <a class="nf-home" href={home}>Back to the book</a>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .nf {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    padding: 24px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+  }
+
+  .nf-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+  }
+
+  .nf-a {
+    width: 46vmax;
+    height: 46vmax;
+    left: -12vmax;
+    top: -14vmax;
+    background: oklch(0.82 0.075 85 / 0.55);
+  }
+
+  .nf-b {
+    width: 40vmax;
+    height: 40vmax;
+    right: -10vmax;
+    top: 22vh;
+    background: oklch(0.75 0.08 25 / 0.4);
+  }
+
+  .nf-c {
+    width: 44vmax;
+    height: 44vmax;
+    left: 18vw;
+    bottom: -20vmax;
+    background: oklch(0.78 0.06 160 / 0.45);
+  }
+
+  .nf-card {
+    position: relative;
+    max-width: 30rem;
+    padding: clamp(28px, 6vh, 52px) clamp(28px, 5vw, 56px);
+    text-align: center;
+    background: color-mix(in oklch, var(--paper) 62%, transparent);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: 0 24px 70px oklch(0 0 0 / 0.16);
+    backdrop-filter: blur(22px) saturate(1.15);
+    animation: nf-in 0.7s cubic-bezier(0.25, 1, 0.5, 1) backwards;
+  }
+
+  @keyframes nf-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .nf-code {
+    margin: 0 0 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.42em;
+    text-indent: 0.42em; /* recenters the tracked-out glyphs */
+    opacity: 0.55;
+  }
+
+  .nf-title {
+    margin: 0 0 12px;
+    font-size: clamp(26px, 4.6vw, 38px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .nf-copy {
+    margin: 0 auto 26px;
+    max-width: 24rem;
+    font-size: 15px;
+    line-height: 1.65;
+    opacity: 0.72;
+  }
+
+  .nf-home {
+    display: inline-block;
+    padding: 11px 22px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink);
+    transition:
+      opacity 0.25s ease,
+      background-color 0.25s ease;
+  }
+
+  .nf-home:hover,
+  .nf-home:focus-visible {
+    opacity: 0.85;
+    outline-offset: 3px;
+    background-color: color-mix(in oklch, var(--ink) 8%, transparent);
+  }
+</style>

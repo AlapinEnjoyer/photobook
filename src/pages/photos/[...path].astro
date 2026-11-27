@@ -1,0 +1,35 @@
+---
+import type { GetStaticPaths } from "astro";
+import config from "../../../photobook.config";
+import Photobook from "../../components/Photobook.astro";
+import type { Collection, Photo } from "../../core/types";
+import { getCollections, getPhotos, getSocialImages } from "../../data/photos";
+
+export const getStaticPaths = (async () => {
+  const [photos, collections] = await Promise.all([getPhotos(), getCollections()]);
+  const byKey = new Map(collections.map((collection) => [collection.key, collection]));
+
+  return photos.map((photo) => ({
+    params: { path: photo.id },
+    props: { photo, collection: byKey.get(photo.collection) ?? null },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  photo: Photo;
+  collection: Collection | null;
+}
+
+const { photo, collection } = Astro.props;
+const title = [photo.title, collection?.name, config.title].filter(Boolean).join(" | ");
+const description = photo.caption ?? photo.alt;
+const ogImage = (await getSocialImages()).photos.get(photo.id);
+---
+
+<Photobook
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  view={{ kind: "photo", id: photo.id }}
+  scope={collection?.key ?? "all"}
+/>
