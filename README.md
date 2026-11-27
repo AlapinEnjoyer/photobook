@@ -37,7 +37,7 @@ pnpm dev
 | `pnpm check` | Run `astro check` and Biome lint/format checks |
 | `pnpm lint:fix` | Auto-format and fix lint issues with Biome |
 | `pnpm test` | Run Vitest unit tests |
-| `pnpm build` | Typecheck and build static site to `dist/` |
+| `pnpm build` | Build static site to `dist/` (run `pnpm check` to typecheck) |
 | `pnpm preview` | Preview the built `dist/` output |
 
 ## Adding photos and collections
@@ -105,7 +105,7 @@ Replace `site` and `public/og-image.jpg` before deploying.
 
 ## Deploying
 
-`pnpm build` produces a static `dist/` folder with no server runtime. See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for Cloudflare Pages, GitHub Pages, VPS nginx setup, subpath `base` deploys, Cloudflare R2 CDN hosting, and troubleshooting.
+`pnpm build` produces a static `dist/` folder with no server runtime. See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for Cloudflare Workers, Cloudflare Pages, GitHub Pages, VPS nginx setup, subpath `base` deploys, Cloudflare R2 CDN hosting, and troubleshooting.
 
 ## License
 

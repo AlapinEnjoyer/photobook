@@ -10,9 +10,24 @@
 | `public/og-image.jpg` | Replace file | Default 1200×630 JPEG or PNG preview card (avoid AVIF/WebP for social crawlers). |
 | `base` | `astro.config.mjs` | Only for subpath deploys such as `user.github.io/<repo>` (`base: "/<repo>"`). Omit for root/custom domains. |
 
-## Cloudflare Pages
+## Cloudflare Workers (static assets)
 
-Recommended for photo-heavy static sites (unlimited free-tier bandwidth and seamless R2 pairing).
+Recommended for photo-heavy static sites (free, unlimited static-asset requests and seamless R2 pairing). This is the default when you connect a repo under **Workers & Pages → Create** in the Cloudflare dashboard.
+
+`wrangler.jsonc` at the repo root makes `wrangler deploy` upload `dist/` as a static-only Worker. Keep it: without a config file, wrangler tries to auto-configure the project (runs `astro add cloudflare` and adds wrangler as a dependency), which fails under pnpm with `ERR_PNPM_IGNORED_BUILDS` and would add an SSR adapter this site doesn't need. The `name` field must match the Worker name in the dashboard.
+
+| Setting | Value |
+| :-- | :-- |
+| Build command | `pnpm build` |
+| Deploy command | `npx wrangler deploy` |
+| Node version | `22.23.4` or newer (`NODE_VERSION`) |
+| `PHOTO_CDN_BASE` | Set as a build variable only if `source.kind` is `"remote"` |
+
+Pushes to `main` deploy to production; other branches get preview URLs. Attach a domain under the Worker's **Settings → Domains & Routes → Add → Custom domain**. If the zone is on Cloudflare, the DNS record and certificate are created automatically, so don't add the record by hand first.
+
+`public/_headers` sets one-year immutable caching for `/_astro/*` and `/img/*` (both have content-hashed filenames). It applies on both Workers and Pages.
+
+## Cloudflare Pages
 
 | Setting | Value |
 | :-- | :-- |
