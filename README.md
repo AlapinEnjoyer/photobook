@@ -1,43 +1,112 @@
-# Astro Starter Kit: Minimal
+# Photobook
+
+A fast, minimal photography portfolio template built with [Astro](https://astro.build) and [Preact](https://preactjs.com).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/preview-dark.jpg" />
+  <source media="(prefers-color-scheme: light)" srcset="./docs/preview-light.jpg" />
+  <img alt="Photobook justified photo grid" src="./docs/preview-light.jpg" />
+</picture>
+
+| Collections | Lightbox |
+| :--: | :--: |
+| ![Collections showcase](./docs/preview-collections.jpg) | ![Lightbox with filmstrip](./docs/preview-lightbox.jpg) |
+
+## Features
+
+- **Zero-crop justified grid** — pure CSS flexbox layout that preserves every photo's aspect ratio before hydration and with JavaScript off.
+- **Full-bleed collections** — alternating split panels with wheel, swipe, and keyboard navigation.
+- **Lightbox & filmstrip** — keyboard (`←`, `→`, `F`, `Esc`), swipe, and fullscreen support with neighbour preloading.
+- **Animated light/dark theme** — radial color wash using registered CSS `@property` tokens, respecting `prefers-reduced-motion`.
+- **Motion tiles** — video tiles that lazy-load near the viewport and play on hover.
+- **Static shareable routes** — pre-rendered pages for every photo (`/photos/<id>/`) and collection (`/collections/<slug>/`), per-photo 1200×630 Open Graph cards, sitemap, and `robots.txt`.
+- **Scalable payloads & image pipeline** — each page embeds its first batch of 48 tiles while `/catalog.json` loads the rest. Sharp generates content-hashed variants, strips source EXIF, and supports local builds or remote CDNs.
+
+## Quick start
+
+Requires Node `>= 22.23.4`.
 
 ```sh
-pnpm create astro@latest -- --template minimal
+pnpm install
+pnpm dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+| Command | Action |
+| :-- | :-- |
+| `pnpm dev` | Start dev server on `localhost:4321` (`astro dev --background` to detach) |
+| `pnpm check` | Run `astro check` and Biome lint/format checks |
+| `pnpm lint:fix` | Auto-format and fix lint issues with Biome |
+| `pnpm test` | Run Vitest unit tests |
+| `pnpm build` | Typecheck and build static site to `dist/` |
+| `pnpm preview` | Preview the built `dist/` output |
 
-## 🚀 Project Structure
+## Adding photos and collections
 
-Inside of your Astro project, you'll see the following folders and files:
+Put images in `src/photos/`. Loose files appear first in **all**; one-level subfolders become collections sorted numerically by filename.
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/photos/
+  blue-hour.jpg
+  iceland/
+    01-morning.jpg
+    02-glacier.jpg
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Collection names cannot be nested or use reserved menu keys (`all`, `featured`, `collections`, `about`).
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### Import scripts
 
-Any static assets, like images, can be placed in the `public/` directory.
+Keep raw camera originals out of Git. Use the import scripts to downscale masters into `src/photos/` (collection argument is optional):
 
-## 🧞 Commands
+```sh
+node scripts/import-photos.mjs ~/Pictures/iceland-2025 iceland
+node scripts/import-videos.mjs ~/Footage/tide.mov low-tide --seconds 6 --poster 2
+```
 
-All commands are run from the root of the project, from a terminal:
+`import-videos.mjs` requires `ffmpeg`, writes a stripped MP4 into `public/video/`, extracts a matching cover still into `src/photos/`, and prints the frontmatter snippet.
 
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+### Metadata and About
 
-## 👀 Want to learn more?
+Metadata is optional and sparse. For a collection, add `src/content/collections/<folder>.md` (or `src/content/photos.md` for loose photos):
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```yaml
+---
+title: "iceland"
+year: "2025"
+order: 1
+cover: "02-glacier.jpg"
+photos:
+  - file: "01-morning.jpg"
+    alt: "Basalt cliffs under a deep blue pre-dawn sky"
+    featured: true
+    caption: "Vík, 04:20" # shown when grid.showCaptions is true
+---
+```
+
+Edit `src/content/about.md` for the About page, or delete it to hide the menu entry. The **featured** and **collections** menu entries also appear only when content exists for them.
+
+## Configuration
+
+Edit [`photobook.config.ts`](./photobook.config.ts) to set `site`, `title`, `description`, `ogImage` (keep JPEG/PNG for social crawlers), `personalSite`, EXIF `credit`, grid `rowHeight`/`showCaptions`, default `theme`, image `widths`/`format`/`quality`, and `source` (`local` or `remote`).
+
+Replace `site` and `public/og-image.jpg` before deploying.
+
+## Architecture
+
+| Path | Responsibility |
+| :-- | :-- |
+| `pipeline/` | Sharp image pipeline shared by the Astro integration and CLI |
+| `src/integrations/` | Astro hooks to run the pipeline, watch/serve `/img/` in dev, and copy variants to `dist/` |
+| `src/core/` | Pure shared logic: types, naming, variant keys, routing, and pool slicing |
+| `src/data/` | Server-side assembly of `photos.manifest.json` and content collections |
+| `src/client/` | Preact app: per-island store, history navigator, hooks, and UI components |
+| `src/styles/` | Design tokens, keyframes, and per-feature stylesheets |
+| `tests/` | Vitest unit tests for `src/core/` and `src/data/` |
+
+## Deploying
+
+`pnpm build` produces a static `dist/` folder with no server runtime. See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for Cloudflare Pages, GitHub Pages, VPS nginx setup, subpath `base` deploys, Cloudflare R2 CDN hosting, and troubleshooting.
+
+## License
+
+Code is licensed under [MIT](./LICENSE).
