@@ -1,1 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="10 12 100 100">
+  <style>
+    .t1 { fill: #6f5c55; } .t2 { fill: #c9a67a; } .t3 { fill: #5b6051; }
+    .t4 { fill: #8fa3ad; } .t5 { fill: #9f402d; } .t6 { fill: #d4b8a0; }
+    .t7 { fill: #3e4736; } .t8 { fill: #b07a5e; } .t9 { fill: #7d8a92; }
+    @media (prefers-color-scheme: dark) {
+      .t1 { fill: #bfafa7; } .t2 { fill: #e0c49c; } .t3 { fill: #bac2a8; }
+      .t4 { fill: #a9bcc5; } .t5 { fill: #ff9a82; } .t6 { fill: #e8d2bf; }
+      .t7 { fill: #8f9a7e; } .t8 { fill: #d39b7d; } .t9 { fill: #a3b0b8; }
+    }
+  </style>
+  <rect class="t1" x="14" y="19" width="34" height="26" rx="2"/>
+  <rect class="t2" x="52" y="19" width="22" height="26" rx="2"/>
+  <rect class="t3" x="78" y="19" width="28" height="26" rx="2"/>
+  <rect class="t4" x="14" y="49" width="20" height="26" rx="2"/>
+  <rect class="t5" x="38" y="49" width="40" height="26" rx="2"/>
+  <rect class="t6" x="82" y="49" width="24" height="26" rx="2"/>
+  <rect class="t7" x="14" y="79" width="30" height="26" rx="2"/>
+  <rect class="t8" x="48" y="79" width="28" height="26" rx="2"/>
+  <rect class="t9" x="80" y="79" width="26" height="26" rx="2"/>
+</svg>

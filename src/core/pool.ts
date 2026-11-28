@@ -18,9 +18,26 @@ export function poolKey({ view, scope }: { view: View; scope: string }): string 
   }
 }
 
+// Fowler–Noll–Vo, pretty cool!
+function mixKey(id: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
+export function mixed(photos: Photo[]): Photo[] {
+  return photos
+    .map((p) => ({ p, k: mixKey(p.id) }))
+    .sort((a, b) => a.k - b.k || a.p.id.localeCompare(b.p.id))
+    .map(({ p }) => p);
+}
+
 export function poolFor(photos: Photo[], cat: string): Photo[] {
-  if (!cat || cat === "all") return photos;
-  if (cat === "featured") return photos.filter((p) => p.featured);
+  if (!cat || cat === "all") return mixed(photos);
+  if (cat === "featured") return mixed(photos.filter((p) => p.featured));
 
   const own = photos.filter((p) => p.collection === cat);
   return own.length ? own : photos;

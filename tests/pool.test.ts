@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { embedPool, GRID_BATCH, gridLimitFor, poolFor, stepDirection } from "../src/core/pool";
+import { embedPool, GRID_BATCH, gridLimitFor, mixed, poolFor, stepDirection } from "../src/core/pool";
 import type { Photo } from "../src/core/types";
 
 const photo = (id: string, collection: string, featured = false) => ({ id, collection, featured }) as Photo;
@@ -7,9 +7,22 @@ const photo = (id: string, collection: string, featured = false) => ({ id, colle
 const book = [photo("loose", ""), photo("a/1", "a", true), photo("a/2", "a"), photo("b/1", "b")];
 
 describe("poolFor", () => {
-  it("returns the whole book for all and for an empty key", () => {
-    expect(poolFor(book, "all")).toBe(book);
-    expect(poolFor(book, "")).toBe(book);
+  it("returns the whole book, mixed, for all and for an empty key", () => {
+    const ids = poolFor(book, "all").map((p) => p.id);
+    expect([...ids].sort()).toEqual(book.map((p) => p.id).sort());
+    expect(poolFor(book, "").map((p) => p.id)).toEqual(ids);
+  });
+
+  it("mixes in a fixed order that new photos don't disturb", () => {
+    const many = Array.from({ length: 40 }, (_, i) => photo(`${i % 2 ? "a" : "b"}/${i}`, i % 2 ? "a" : "b"));
+    const before = mixed(many).map((p) => p.id);
+    expect(mixed([...many].reverse()).map((p) => p.id)).toEqual(before);
+    expect(before).not.toEqual(many.map((p) => p.id));
+
+    const after = mixed([...many, photo("a/new", "a")])
+      .map((p) => p.id)
+      .filter((id) => id !== "a/new");
+    expect(after).toEqual(before);
   });
 
   it("filters to a collection", () => {
